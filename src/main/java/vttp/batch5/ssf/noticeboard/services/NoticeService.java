@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,10 @@ public class NoticeService {
 
 	@Autowired
 	NoticeRepository noticeRepo;
+
+	 @Autowired
+    private StringRedisTemplate redisTemplate;
+
 
 	// TODO: Task 3
 	// You can change the signature of this method by adding any number of parameters
@@ -84,4 +89,15 @@ public class NoticeService {
 
 		return noticeRepo.getId();
 	}
+
+	public boolean isRedisHealthy() {
+        try {
+            
+            redisTemplate.getConnectionFactory().getConnection().ping();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
+

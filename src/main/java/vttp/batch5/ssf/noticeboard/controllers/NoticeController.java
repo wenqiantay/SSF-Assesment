@@ -1,6 +1,7 @@
 package vttp.batch5.ssf.noticeboard.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.validation.Valid;
 import vttp.batch5.ssf.noticeboard.models.Notice;
@@ -61,19 +63,18 @@ public class NoticeController {
         
     }
     
-    // @GetMapping(path = "/status")
-    // @ResponseBody
-    // public ResponseEntity<String> healthcheck(){
-
-    //     if(redisConnection.equalsIgnoreCase("pong")){
-
-    //         return ResponseEntity.ok("{}");
-
-    //     } else {
-
-    //         return ResponseEntity.status(503).body("{}");
-    //     }
-
-
+    @GetMapping(path = "/status")
+    @ResponseBody
+    public ResponseEntity<String> checkRedisHealth() {
+        boolean isHealthy = noticeSvc.isRedisHealthy();
+        if (isHealthy) {
+            return ResponseEntity.ok("{}");
+        } else {
+            return ResponseEntity.status(503)
+                    .body("{}");
+        }
     }
+
+}
+
 
